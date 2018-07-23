@@ -6,6 +6,6 @@ description: Your pets follow you.
 api: [3.0.0, 4.0.0]
 
 permissions:
- pets.command.use:
+ pets.use.command:
   default: true
   description: "Allow to use the pets"
