@@ -3,7 +3,7 @@ main: PT\Loader
 author: TutoGamerWalid
 version: 1.0
 description: Your pets follow you.
-api: [3.0.0, 4.0.0]
+api: 3.0.0
 
 permissions:
  pets.use.command:
