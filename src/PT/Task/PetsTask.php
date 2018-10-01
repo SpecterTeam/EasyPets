@@ -56,7 +56,7 @@ class PetsTask extends Task
                 $pk->yRot = $p->yaw;
                 $pk->zRot = $p->yaw;
                 $pk->flags = MoveEntityAbsolutePacket::FLAG_TELEPORT;
-                $p->dataPacket($pk);
+                $p->sendDataPacket($pk);
                 Server::getInstance()->broadcastPacket(Server::getInstance()->getOnlinePlayers(), $pk);
 
             }
