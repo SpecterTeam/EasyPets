@@ -95,7 +95,7 @@ class PetsSession
 
             $pk = new RemoveEntityPacket();
             $pk->entityUniqueId = PetsSession::$players[$player->getName()]["entity"];
-            $player->dataPacket($pk);
+            $player->sendDataPacket($pk);
 
             Server::getInstance()->broadcastPacket(Server::getInstance()->getOnlinePlayers(), $pk);
             unset(PetsSession::$players[$player->getName()]);
