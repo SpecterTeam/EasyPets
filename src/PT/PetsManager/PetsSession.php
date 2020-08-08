@@ -19,8 +19,8 @@
 namespace PT\PetsManager;
 
 use pocketmine\entity\Entity;
-use pocketmine\network\mcpe\protocol\AddEntityPacket;
-use pocketmine\network\mcpe\protocol\RemoveEntityPacket;
+use pocketmine\network\mcpe\protocol\AddActorPacket;
+use pocketmine\network\mcpe\protocol\RemoveActorPacket;
 use pocketmine\Server;
 use pocketmine\Player;
 
@@ -52,10 +52,7 @@ class PetsSession
      */
     public static function getPetsPlayer(Player $player)
     {
-        if (isset(PetsSession::$players[$player->getName()])) {
-            return PetsSession::$players[$player->getName()];
-        }
-        return false;
+        return PetsSession::$players[$player->getName()] ?? false;
     }
 
 
@@ -70,10 +67,11 @@ class PetsSession
             PetsSession::$players[$player->getName()]["entity"] = Entity::$entityCount++;
             PetsSession::$players[$player->getName()]["id"] = Pets::$pets[$name];
 
-            $pk = new AddEntityPacket();
+            $pk = new AddActorPacket();
             $pk->entityRuntimeId = PetsSession::$players[$player->getName()]["entity"];
-            $pk->type = PetsSession::$players[$player->getName()]["id"];
+            $pk->type = AddActorPacket::LEGACY_ID_MAP_BC[PetsSession::$players[$player->getName()]["id"]];
             $pk->position = $player->asVector3()->add(0, 3, 0);
+            $pk->motion = $this->getMotion();
             $pk->yaw = $player->getYaw();
             $pk->pitch = $player->getPitch();
             if (in_array(PetsSession::$players[$player->getName()]["id"], self::BIGGEST_PETS_BY_ID)) {
@@ -93,7 +91,7 @@ class PetsSession
 
         if (isset(PetsSession::$players[$player->getName()])) {
 
-            $pk = new RemoveEntityPacket();
+            $pk = new RemoveActorPacket();
             $pk->entityUniqueId = PetsSession::$players[$player->getName()]["entity"];
             $player->sendDataPacket($pk);
 
